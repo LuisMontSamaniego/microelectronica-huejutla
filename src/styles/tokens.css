@@ -1,0 +1,57 @@
+/*
+  Tokens de diseño de Microelectrónica Huejutla.
+  Contrastes medidos contra WCAG 2.2 (ver .claude/rules/web-diseno.md en el espacio de trabajo).
+*/
+:root {
+  /* Color */
+  --color-fondo: #0f2a44; /* azul marino de la marca */
+  --color-superficie: #153656; /* tarjetas y franjas */
+  --color-acento: #2ec4f1; /* cian del logo: 7.2:1 sobre el fondo */
+  --color-acento-claro: #5acff3; /* botón al pasar el cursor: 8.1:1 con texto marino */
+  --color-acento-oscuro: #0b7fa3; /* solo para fondos claros: 4.6:1 sobre blanco */
+  --color-texto: #ffffff; /* 14.6:1 sobre el fondo */
+  --color-texto-suave: #93aecb; /* 6.4:1 sobre el fondo, 5.4:1 sobre la superficie */
+  --color-borde: #2b5175; /* decorativo: separa tarjetas y filas */
+  --color-traza: rgb(46 196 241 / 0.45); /* pistas de circuito */
+  --color-whatsapp: #25d366; /* si se usa, siempre con texto marino */
+
+  /* Tipografía */
+  --fuente: var(--font-montserrat);
+  --peso-regular: 400;
+  --peso-medio: 500;
+  --peso-negrita: 700;
+
+  --texto-sm: 1rem; /* nunca menos de 16 px en texto de lectura */
+  --texto-base: clamp(1.0625rem, 1.02rem + 0.2vw, 1.125rem); /* 17 → 18 px */
+  --texto-lg: clamp(1.1875rem, 1.1rem + 0.4vw, 1.375rem); /* 19 → 22 px */
+  --titulo-3: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem); /* 20 → 26 px */
+  --titulo-2: clamp(1.75rem, 1.35rem + 1.8vw, 2.625rem); /* 28 → 42 px */
+  --titulo-1: clamp(2rem, 1.25rem + 3.4vw, 4rem); /* 32 → 64 px */
+
+  --interlineado: 1.6;
+  --interlineado-titulo: 1.12;
+
+  /* Espacios */
+  --esp-1: 0.25rem;
+  --esp-2: 0.5rem;
+  --esp-3: 0.75rem;
+  --esp-4: 1rem;
+  --esp-5: 1.5rem;
+  --esp-6: 2rem;
+  --esp-7: 3rem;
+  --esp-8: 4rem;
+  --esp-9: 6rem;
+  --esp-seccion: clamp(3.5rem, 2.5rem + 5vw, 6.5rem);
+  --margen-lateral: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+
+  /* Radios: el chip del logo tiene esquinas suaves, nada de píldoras */
+  --radio-sm: 4px;
+  --radio-boton: 6px;
+  --radio-md: 10px;
+
+  /* Medidas */
+  --ancho-max: 72rem;
+  --ancho-texto: 38rem; /* unos 65 caracteres por línea */
+  --alto-tactil: 2.75rem; /* 44 px */
+  --grosor-foco: 3px;
+}

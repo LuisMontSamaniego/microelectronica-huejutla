@@ -1,33 +1,50 @@
 ---
+// Provisional hasta la Fase 3: ya usa el layout, la marca y el botón de WhatsApp.
+import Base from '../layouts/Base.astro';
+import BotonWhatsApp from '../components/BotonWhatsApp.astro';
+import { negocio } from '../data/negocio';
 ---
 
-<html lang="es-MX">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>Microelectrónica Huejutla</title>
-	</head>
-	<body>
-		<main>
-			<h1>Microelectrónica Huejutla</h1>
-			<p>Página en construcción.</p>
-		</main>
-	</body>
-</html>
+<Base
+  titulo={negocio.nombre}
+  descripcion="Reparación de pantallas, bocinas, microondas y más en Huejutla de Reyes. 40 años de experiencia familiar."
+>
+  <div class="contenedor provisional">
+    <h1>
+      <span>¿Tu aparato</span>
+      <span>dejó de funcionar?</span>
+    </h1>
+    <p>
+      Estamos terminando la página. Mientras tanto, mándanos foto de tu aparato por WhatsApp y te
+      cotizamos.
+    </p>
+    <BotonWhatsApp tamano="grande" />
+  </div>
+</Base>
 
 <style>
-	body {
-		margin: 0;
-		min-height: 100vh;
-		background: #0f2a44;
-		color: #fff;
-		font-family: system-ui, sans-serif;
-	}
-	main {
-		padding: 2rem 1rem;
-	}
-	h1 {
-		color: #2ec4f1;
-	}
+  .provisional {
+    display: grid;
+    gap: var(--esp-5);
+    justify-items: start;
+    padding-block: var(--esp-seccion);
+  }
+
+  h1 {
+    font-size: var(--titulo-1);
+  }
+
+  h1 span {
+    display: block;
+  }
+
+  h1 span:first-child {
+    color: var(--color-acento);
+  }
+
+  p {
+    max-width: var(--ancho-texto);
+    font-size: var(--texto-lg);
+    color: var(--color-texto-suave);
+  }
 </style>

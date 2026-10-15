@@ -1,0 +1,124 @@
+---
+// Encabezado: logo y navegación. No es fijo, así que en celular nunca tapa el contenido;
+// ahí el botón de WhatsApp vive en la barra de abajo.
+import Logo from './Logo.astro';
+import BotonWhatsApp from './BotonWhatsApp.astro';
+
+interface Props {
+  mensajeWhatsApp?: string;
+}
+
+const { mensajeWhatsApp } = Astro.props;
+
+const enlaces = [
+  { href: '/#servicios', texto: 'Servicios' },
+  { href: '/#como-funciona', texto: 'Cómo funciona' },
+  { href: '/contacto', texto: 'Contacto' },
+];
+
+const ruta = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+
+<header class="encabezado">
+  <div class="contenedor barra">
+    <a href="/" class="marca" aria-current={ruta === '/' ? 'page' : undefined}>
+      <Logo class="logo-encabezado" />
+    </a>
+    <nav aria-label="Principal">
+      <ul>
+        {
+          enlaces.map(({ href, texto }) => (
+            <li>
+              <a href={href} aria-current={ruta === href ? 'page' : undefined}>
+                {texto}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <BotonWhatsApp mensaje={mensajeWhatsApp} tamano="compacto" class="cta-escritorio" />
+  </div>
+</header>
+
+<style>
+  .encabezado {
+    border-bottom: 1px solid var(--color-borde);
+  }
+
+  .barra {
+    display: grid;
+    gap: var(--esp-2);
+    padding-top: var(--esp-4);
+  }
+
+  .marca {
+    justify-self: start;
+    border-radius: var(--radio-sm);
+  }
+
+  .barra :global(.logo-encabezado) {
+    width: 11.5rem;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    column-gap: var(--esp-4);
+  }
+
+  nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--alto-tactil);
+    color: var(--color-texto);
+    font-size: var(--texto-sm);
+    font-weight: var(--peso-medio);
+    text-decoration: none;
+  }
+
+  nav a:hover,
+  nav a[aria-current='page'] {
+    color: var(--color-acento);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+  }
+
+  .barra :global(.cta-escritorio) {
+    display: none;
+  }
+
+  @media (min-width: 48rem) {
+    .barra {
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      gap: var(--esp-6);
+      padding-block: var(--esp-4);
+    }
+
+    nav {
+      justify-self: end;
+    }
+
+    ul {
+      column-gap: var(--esp-6);
+    }
+
+    .barra :global(.logo-encabezado) {
+      width: 13.5rem;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .barra {
+      grid-template-columns: auto 1fr auto;
+    }
+
+    .barra :global(.cta-escritorio) {
+      display: inline-flex;
+    }
+  }
+</style>

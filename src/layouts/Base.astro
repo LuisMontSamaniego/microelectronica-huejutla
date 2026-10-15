@@ -1,0 +1,79 @@
+---
+import { Font } from 'astro:assets';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import BarraWhatsApp from '../components/BarraWhatsApp.astro';
+import { negocio } from '../data/negocio';
+
+interface Props {
+  /** Título de la página; se le agrega el nombre del negocio. */
+  titulo: string;
+  /** Descripción para Google y para cuando se comparte el enlace. */
+  descripcion: string;
+  /** Mensaje de WhatsApp de esta página; si falta, se usa el general. */
+  mensajeWhatsApp?: string;
+  /** false para páginas internas que no deben aparecer en Google. */
+  indexar?: boolean;
+}
+
+const { titulo, descripcion, mensajeWhatsApp, indexar = true } = Astro.props;
+
+const tituloCompleto = titulo === negocio.nombre ? titulo : `${titulo} | ${negocio.nombre}`;
+// La dirección canónica se activa cuando `site` esté en astro.config (Fase 4).
+const canonica = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+---
+
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{tituloCompleto}</title>
+    <meta name="description" content={descripcion} />
+    {!indexar && <meta name="robots" content="noindex, nofollow" />}
+    {canonica && <link rel="canonical" href={canonica} />}
+
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#0f2a44" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_MX" />
+    <meta property="og:site_name" content={negocio.nombre} />
+    <meta property="og:title" content={tituloCompleto} />
+    <meta property="og:description" content={descripcion} />
+    {canonica && <meta property="og:url" content={canonica} />}
+
+    <Font cssVariable="--font-montserrat" preload={[{ weight: '400' }, { weight: '700' }]} />
+  </head>
+  <body>
+    <a class="saltar" href="#contenido">Saltar al contenido</a>
+    <Header mensajeWhatsApp={mensajeWhatsApp} />
+    <main id="contenido">
+      <slot />
+    </main>
+    <Footer />
+    <BarraWhatsApp mensaje={mensajeWhatsApp} />
+  </body>
+</html>
+
+<style>
+  .saltar {
+    position: absolute;
+    top: var(--esp-2);
+    left: var(--esp-2);
+    z-index: 20;
+    padding: var(--esp-3) var(--esp-4);
+    background: var(--color-acento);
+    color: var(--color-fondo);
+    font-weight: var(--peso-negrita);
+    border-radius: var(--radio-boton);
+    transform: translateY(-200%);
+  }
+
+  .saltar:focus {
+    transform: none;
+  }
+</style>

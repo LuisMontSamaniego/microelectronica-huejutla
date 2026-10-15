@@ -1,0 +1,42 @@
+---
+// Barra fija con el botón de WhatsApp, solo en celular y tableta.
+// El cuerpo de la página reserva su alto, así que nunca tapa contenido.
+import BotonWhatsApp from './BotonWhatsApp.astro';
+
+interface Props {
+  mensaje?: string;
+}
+
+const { mensaje } = Astro.props;
+---
+
+<div class="barra-whatsapp">
+  <BotonWhatsApp mensaje={mensaje} class="boton-barra" />
+</div>
+
+<style>
+  .barra-whatsapp {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 10;
+    padding: var(--esp-3) var(--margen-lateral) calc(var(--esp-3) + env(safe-area-inset-bottom));
+    background: var(--color-superficie);
+    border-top: 1px solid var(--color-borde);
+  }
+
+  .barra-whatsapp :global(.boton-barra) {
+    width: 100%;
+  }
+
+  @media (max-width: 63.99rem) {
+    :global(body) {
+      padding-bottom: calc(4.5rem + env(safe-area-inset-bottom));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .barra-whatsapp {
+      display: none;
+    }
+  }
+</style>

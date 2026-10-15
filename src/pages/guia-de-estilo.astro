@@ -1,0 +1,203 @@
+---
+// Página interna para revisar todas las piezas de un vistazo. No se enlaza ni se indexa.
+import Base from '../layouts/Base.astro';
+import Seccion from '../components/Seccion.astro';
+import Logo from '../components/Logo.astro';
+import Chip from '../components/Chip.astro';
+import SelloExperiencia from '../components/SelloExperiencia.astro';
+import BotonWhatsApp from '../components/BotonWhatsApp.astro';
+import TarjetaServicio from '../components/TarjetaServicio.astro';
+import Pasos from '../components/Pasos.astro';
+import { servicioDestacado, otrosServicios } from '../data/servicios';
+
+const colores = [
+  { nombre: 'Fondo', variable: '--color-fondo', hex: '#0F2A44', uso: 'Fondo de todo el sitio' },
+  { nombre: 'Superficie', variable: '--color-superficie', hex: '#153656', uso: 'Tarjetas, franjas y pie' },
+  { nombre: 'Acento', variable: '--color-acento', hex: '#2EC4F1', uso: 'Títulos, enlaces y botones · 7.2:1' },
+  { nombre: 'Texto', variable: '--color-texto', hex: '#FFFFFF', uso: 'Texto principal · 14.6:1' },
+  { nombre: 'Texto suave', variable: '--color-texto-suave', hex: '#93AECB', uso: 'Texto secundario · 6.4:1' },
+  { nombre: 'Borde', variable: '--color-borde', hex: '#2B5175', uso: 'Separadores, solo decorativo' },
+];
+
+const escala = [
+  { variable: '--titulo-1', muestra: 'Título 1 · 32 a 64 px' },
+  { variable: '--titulo-2', muestra: 'Título 2 · 28 a 42 px' },
+  { variable: '--titulo-3', muestra: 'Título 3 · 20 a 26 px' },
+  { variable: '--texto-lg', muestra: 'Texto grande · 19 a 22 px' },
+  { variable: '--texto-base', muestra: 'Texto base · 17 a 18 px' },
+  { variable: '--texto-sm', muestra: 'Texto chico · 16 px, el mínimo' },
+];
+---
+
+<Base
+  titulo="Guía de estilo"
+  descripcion="Piezas de diseño del sitio de Microelectrónica Huejutla."
+  indexar={false}
+>
+  <div class="contenedor portada">
+    <h1>Guía de estilo</h1>
+    <p>Todas las piezas del sitio en una sola página. Es interna: no aparece en Google ni en el menú.</p>
+  </div>
+
+  <Seccion id="colores" titulo="Colores">
+    <ul class="muestras">
+      {
+        colores.map((c) => (
+          <li>
+            <span class="muestra" style={`background: var(${c.variable})`} />
+            <strong>{c.nombre}</strong>
+            <code>{c.hex}</code>
+            <span class="uso">{c.uso}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </Seccion>
+
+  <Seccion id="tipografia" titulo="Tipografía" introduccion="Montserrat: negrita (700) en títulos, regular (400) en el texto y media (500) en enlaces y menú." fondo="superficie">
+    <ul class="escala">
+      {
+        escala.map((e) => (
+          <li style={`font-size: var(${e.variable})`} class:list={{ titulo: e.variable.startsWith('--titulo') }}>
+            {e.muestra}
+          </li>
+        ))
+      }
+    </ul>
+  </Seccion>
+
+  <Seccion id="marca" titulo="Logo y sello">
+    <div class="marca">
+      <Logo class="logo-grande" />
+      <Chip class="chip-grande" />
+      <SelloExperiencia />
+    </div>
+  </Seccion>
+
+  <Seccion id="botones" titulo="Botones" fondo="superficie" circuito="derecha">
+    <div class="botones">
+      <BotonWhatsApp />
+      <BotonWhatsApp variante="secundario" />
+      <BotonWhatsApp tamano="compacto" />
+      <BotonWhatsApp tamano="grande" />
+    </div>
+  </Seccion>
+
+  <Seccion
+    id="seccion"
+    titulo="¿Tu aparato"
+    segundaLinea="dejó de funcionar?"
+    introduccion="Así se ve una sección con título en dos líneas, introducción y botón al final."
+    circuito="izquierda"
+    mensajeWhatsApp="Hola, quiero cotizar la reparación de un aparato. Les envío foto y la falla."
+  />
+
+  <Seccion id="servicios" titulo="Servicios" introduccion="El servicio principal va destacado; los demás, como lista.">
+    <div class="servicios">
+      <TarjetaServicio servicio={servicioDestacado} />
+      <div class="filas">
+        {otrosServicios.map((s) => <TarjetaServicio servicio={s} />)}
+      </div>
+    </div>
+  </Seccion>
+
+  <Seccion id="como-funciona" titulo="Cómo funciona" fondo="superficie">
+    <Pasos />
+  </Seccion>
+</Base>
+
+<style>
+  .portada {
+    padding-top: var(--esp-7);
+  }
+
+  h1 {
+    font-size: var(--titulo-1);
+  }
+
+  .portada p {
+    margin-top: var(--esp-4);
+    max-width: var(--ancho-texto);
+    color: var(--color-texto-suave);
+  }
+
+  .muestras {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+    gap: var(--esp-5);
+  }
+
+  .muestras li {
+    display: grid;
+    gap: var(--esp-1);
+  }
+
+  .muestra {
+    height: 4rem;
+    margin-bottom: var(--esp-2);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-md);
+  }
+
+  code {
+    color: var(--color-acento);
+    font-size: var(--texto-sm);
+  }
+
+  .uso {
+    color: var(--color-texto-suave);
+    font-size: var(--texto-sm);
+  }
+
+  .escala {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--esp-4);
+  }
+
+  .escala .titulo {
+    font-weight: var(--peso-negrita);
+    line-height: var(--interlineado-titulo);
+  }
+
+  .marca {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--esp-7);
+  }
+
+  .marca :global(.logo-grande) {
+    width: min(100%, 22rem);
+  }
+
+  .marca :global(.chip-grande) {
+    width: 6rem;
+  }
+
+  .botones {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--esp-4);
+  }
+
+  .servicios {
+    display: grid;
+    gap: var(--esp-7);
+  }
+
+  .filas {
+    border-bottom: 1px solid var(--color-borde);
+  }
+
+  @media (min-width: 64rem) {
+    .servicios {
+      grid-template-columns: 1.15fr 1fr;
+      align-items: start;
+    }
+  }
+</style>

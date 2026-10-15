@@ -1,0 +1,57 @@
+---
+// Pistas de circuito decorativas para la orilla de una sección, con opacidad muy baja.
+interface Props {
+  lado?: 'izquierda' | 'derecha';
+}
+
+const { lado = 'derecha' } = Astro.props;
+
+const pistas = [
+  'M200 60H150L130 80V180',
+  'M200 110H170L150 130V260L130 280H90',
+  'M200 330H160L140 350V420',
+  'M200 380H180L165 395V520L145 540H110',
+  'M200 470H175',
+];
+const pads: [number, number][] = [
+  [130, 180],
+  [90, 280],
+  [140, 420],
+  [110, 540],
+  [175, 470],
+];
+---
+
+<svg
+  viewBox="0 0 200 600"
+  preserveAspectRatio="xMaxYMid meet"
+  class:list={['circuito', lado]}
+  aria-hidden="true"
+  focusable="false"
+>
+  <g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
+    {pistas.map((d) => <path d={d} />)}
+    {pads.map(([cx, cy]) => <circle cx={cx} cy={cy} r="4.5" />)}
+  </g>
+</svg>
+
+<style>
+  .circuito {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: clamp(5rem, 14vw, 12rem);
+    color: var(--color-acento);
+    opacity: 0.08;
+    pointer-events: none;
+  }
+
+  .derecha {
+    right: 0;
+  }
+
+  .izquierda {
+    left: 0;
+    transform: scaleX(-1);
+  }
+</style>

@@ -1,0 +1,73 @@
+---
+// Sello circular "40 años de experiencia familiar", el mismo de los pósters.
+interface Props {
+  class?: string;
+}
+
+const { class: clase } = Astro.props;
+
+// Cada sello necesita su propio id para el arco del texto.
+const idArco = `arco-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<svg
+  viewBox="0 0 160 160"
+  class:list={['sello', clase]}
+  role="img"
+  aria-label="40 años de experiencia familiar"
+  focusable="false"
+>
+  <defs>
+    <path id={idArco} d="M23 80A57 57 0 0 0 137 80" />
+  </defs>
+  <circle cx="80" cy="80" r="77" class="aro" />
+  <circle cx="80" cy="80" r="67" class="aro-interior" />
+  <text x="80" y="78" text-anchor="middle" class="cuarenta">40</text>
+  <text x="80" y="100" text-anchor="middle" class="anios">AÑOS</text>
+  <text class="arco">
+    <textPath href={`#${idArco}`} startOffset="50%" text-anchor="middle">EXPERIENCIA FAMILIAR</textPath>
+  </text>
+</svg>
+
+<style>
+  .sello {
+    display: block;
+    width: 9.5rem;
+    height: auto;
+  }
+
+  text {
+    font-family: var(--fuente);
+    font-weight: var(--peso-negrita);
+    fill: var(--color-texto);
+  }
+
+  .aro {
+    fill: var(--color-superficie);
+    stroke: var(--color-acento);
+    stroke-width: 3;
+  }
+
+  .aro-interior {
+    fill: none;
+    stroke: var(--color-acento);
+    stroke-opacity: 0.35;
+  }
+
+  .cuarenta {
+    font-size: 54px;
+    letter-spacing: -1px;
+  }
+
+  .anios {
+    font-size: 17px;
+    letter-spacing: 1.5px;
+  }
+
+  .arco {
+    fill: var(--color-acento);
+    font-size: 10.5px;
+    font-weight: var(--peso-medio);
+    letter-spacing: 1.4px;
+  }
+</style>

@@ -1,0 +1,152 @@
+---
+// Un servicio en dos formatos:
+// - "destacada": el servicio principal, con su pregunta, sus fallas y el botón de WhatsApp.
+// - "fila": los demás, como renglones de una lista; todo el renglón lleva a su página.
+import BotonWhatsApp from './BotonWhatsApp.astro';
+import type { Servicio } from '../data/servicios';
+
+interface Props {
+  servicio: Servicio;
+  variante?: 'destacada' | 'fila';
+}
+
+const { servicio, variante = servicio.destacado ? 'destacada' : 'fila' } = Astro.props;
+const enlace = `/servicios/${servicio.slug}`;
+---
+
+{
+  variante === 'destacada' ? (
+    <article class="destacada">
+      <h3>
+        <span>{servicio.titulo[0]}</span>
+        <span>{servicio.titulo[1]}</span>
+      </h3>
+      <ul class="lista-fallas">
+        {servicio.fallas.map((falla) => (
+          <li>{falla}</li>
+        ))}
+      </ul>
+      <div class="acciones">
+        <BotonWhatsApp mensaje={servicio.mensajeWhatsApp} />
+        <a href={enlace}>Ver más sobre la reparación de {servicio.nombre.toLowerCase()}</a>
+      </div>
+    </article>
+  ) : (
+    <article class="fila">
+      <h3>
+        <a href={enlace}>{servicio.nombre}</a>
+      </h3>
+      <p>
+        {servicio.titulo[0]} {servicio.titulo[1]}
+      </p>
+      <span class="pad" aria-hidden="true" />
+    </article>
+  )
+}
+
+<style>
+  /* Destacada */
+  .destacada {
+    display: grid;
+    gap: var(--esp-5);
+    padding: var(--esp-6) var(--esp-4);
+    background: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-md);
+  }
+
+  .destacada h3 {
+    font-size: var(--titulo-2);
+  }
+
+  .destacada h3 span {
+    display: block;
+  }
+
+  .destacada h3 span:first-child {
+    color: var(--color-acento);
+  }
+
+  .acciones :global(.boton) {
+    padding-inline: 1.25rem;
+  }
+
+  .acciones {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--esp-4) var(--esp-5);
+  }
+
+  .acciones > a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--alto-tactil);
+    font-weight: var(--peso-medio);
+  }
+
+  /* Fila */
+  .fila {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    column-gap: var(--esp-4);
+    padding-block: var(--esp-4);
+    border-top: 1px solid var(--color-borde);
+  }
+
+  .fila h3 {
+    font-size: var(--titulo-3);
+  }
+
+  .fila h3 a {
+    color: var(--color-texto);
+    text-decoration: none;
+  }
+
+  /* Todo el renglón es clic */
+  .fila h3 a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .fila p {
+    grid-column: 1;
+    color: var(--color-texto-suave);
+  }
+
+  /* El pad se "suelda" (se rellena) al pasar el cursor o enfocar */
+  .pad {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    width: 1.1rem;
+    height: 1.1rem;
+    border: 2px solid var(--color-acento);
+    border-radius: 50%;
+    transition: background-color 150ms ease;
+  }
+
+  .fila:hover h3 a,
+  .fila:focus-within h3 a {
+    color: var(--color-acento);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+  }
+
+  .fila:hover .pad,
+  .fila:focus-within .pad {
+    background: var(--color-acento);
+  }
+
+  @media (min-width: 48rem) {
+    .destacada {
+      padding: var(--esp-7) var(--esp-6);
+    }
+
+    .destacada .lista-fallas {
+      font-size: var(--texto-lg);
+    }
+  }
+</style>

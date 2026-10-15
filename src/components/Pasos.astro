@@ -1,0 +1,138 @@
+---
+// Pasos como una pista de circuito: cada paso es un pad y la pista los une.
+// El último pad va relleno: el circuito se cierra cuando el aparato vuelve funcionando.
+import { pasos as pasosPorDefecto, type Paso } from '../data/pasos';
+
+interface Props {
+  pasos?: Paso[];
+}
+
+const { pasos = pasosPorDefecto } = Astro.props;
+---
+
+<ol class="pasos">
+  {
+    pasos.map((paso, i) => (
+      <li class:list={['paso', { final: i === pasos.length - 1 }]}>
+        <span class="pad" aria-hidden="true">
+          {i + 1}
+        </span>
+        <div class="cuerpo">
+          <h3>{paso.titulo}</h3>
+          <p>{paso.texto}</p>
+        </div>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .pasos {
+    --pad: 3rem;
+    --grosor-pista: 3px;
+    --separacion: var(--esp-6);
+    list-style: none;
+    padding: 0;
+  }
+
+  .paso {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--pad) 1fr;
+    column-gap: var(--esp-4);
+    padding-bottom: var(--separacion);
+  }
+
+  .paso:last-child {
+    padding-bottom: 0;
+  }
+
+  /* Pista vertical hasta el siguiente pad */
+  .paso:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    top: var(--pad);
+    bottom: 0;
+    left: calc(var(--pad) / 2 - var(--grosor-pista) / 2);
+    width: var(--grosor-pista);
+    background: var(--color-traza);
+  }
+
+  .pad {
+    display: grid;
+    place-items: center;
+    width: var(--pad);
+    height: var(--pad);
+    border: 3px solid var(--color-acento);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--color-acento);
+    font-weight: var(--peso-negrita);
+    font-size: var(--texto-lg);
+  }
+
+  .final .pad {
+    background: var(--color-acento);
+    color: var(--color-fondo);
+    /* Anillo exterior del pad, con un hueco transparente que sirve sobre cualquier fondo */
+    outline: 2px solid var(--color-traza);
+    outline-offset: 4px;
+  }
+
+  .cuerpo {
+    padding-top: 0.55rem;
+  }
+
+  h3 {
+    font-size: var(--titulo-3);
+  }
+
+  .cuerpo p {
+    margin-top: var(--esp-2);
+    color: var(--color-texto-suave);
+    max-width: 30ch;
+  }
+
+  /* En escritorio, la pista corre de izquierda a derecha */
+  @media (min-width: 64rem) {
+    /* Filas compartidas: pads, títulos y textos quedan alineados entre columnas */
+    .pasos {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: auto auto auto;
+      column-gap: var(--separacion);
+      row-gap: var(--esp-3);
+    }
+
+    .paso {
+      grid-row: span 3;
+      grid-template-columns: 1fr;
+      grid-template-rows: subgrid;
+      padding-bottom: 0;
+    }
+
+    .paso .pad {
+      margin-bottom: var(--esp-2);
+    }
+
+    .cuerpo {
+      display: contents;
+    }
+
+    .cuerpo p {
+      margin-top: 0;
+    }
+
+    .paso:not(:last-child)::before {
+      top: calc(var(--pad) / 2 - var(--grosor-pista) / 2);
+      bottom: auto;
+      left: var(--pad);
+      width: calc(100% + var(--separacion) - var(--pad));
+      height: var(--grosor-pista);
+    }
+
+    .cuerpo {
+      padding-top: 0;
+    }
+  }
+</style>

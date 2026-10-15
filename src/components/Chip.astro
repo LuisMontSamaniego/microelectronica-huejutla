@@ -1,0 +1,47 @@
+---
+// Ícono del chip, redibujado en SVG a partir del logo. Usa currentColor,
+// así que toma el color del texto que lo rodea (cian por defecto).
+// Se puede usar suelto o dentro de otro SVG (con x, y, width y height).
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = HTMLAttributes<'svg'>;
+
+const { class: clase, ...resto } = Astro.props;
+
+// Un lado del chip; los otros tres son el mismo lado girado.
+const lados = [0, 90, 180, 270];
+---
+
+<svg
+  viewBox="16 16 88 88"
+  class:list={['chip', clase]}
+  aria-hidden="true"
+  focusable="false"
+  {...resto}
+>
+  <rect x="40" y="40" width="40" height="40" rx="4.5" fill="none" stroke="currentColor" stroke-width="3.6" />
+  <rect x="45" y="45" width="30" height="30" rx="2" fill="currentColor" />
+  {
+    lados.map((grados) => (
+      <g transform={`rotate(${grados} 60 60)`}>
+        <path
+          d="M60 36V22.6M53.5 36V28M66.5 36V28M47 36V24.5H40.1M73 36V24.5H79.9"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <circle cx="60" cy="20" r="2.6" fill="currentColor" />
+        <circle cx="37.5" cy="24.5" r="2.6" fill="currentColor" />
+        <circle cx="82.5" cy="24.5" r="2.6" fill="currentColor" />
+      </g>
+    ))
+  }
+</svg>
+
+<style>
+  .chip {
+    color: var(--color-acento);
+  }
+</style>

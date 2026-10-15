@@ -1,0 +1,99 @@
+---
+// Pie de página: dónde recibimos los equipos y cómo escribirnos.
+import Logo from './Logo.astro';
+import { negocio, enlaceWhatsApp } from '../data/negocio';
+
+const anio = new Date().getFullYear();
+---
+
+<footer class="pie">
+  <div class="contenedor rejilla">
+    <div class="marca">
+      <Logo class="logo-pie" />
+      <p>{negocio.experiencia}.</p>
+    </div>
+
+    <div>
+      <h2>Recepción de equipos</h2>
+      <p>
+        {negocio.puntoDeAtencion}<br />
+        {negocio.ciudad}, {negocio.estado}
+      </p>
+    </div>
+
+    <div>
+      <h2>Escríbenos</h2>
+      <ul>
+        <li>
+          <a href={enlaceWhatsApp()}>WhatsApp {negocio.telefono}</a>
+        </li>
+        {
+          negocio.facebook && (
+            <li>
+              <a href={negocio.facebook}>Página de Facebook</a>
+            </li>
+          )
+        }
+      </ul>
+    </div>
+  </div>
+
+  <div class="contenedor legal">
+    <p>© {anio} {negocio.nombre}</p>
+  </div>
+</footer>
+
+<style>
+  .pie {
+    padding-block: var(--esp-7) var(--esp-5);
+    background: var(--color-superficie);
+    border-top: 1px solid var(--color-borde);
+    color: var(--color-texto-suave);
+  }
+
+  .rejilla {
+    display: grid;
+    gap: var(--esp-6);
+  }
+
+  .marca {
+    display: grid;
+    gap: var(--esp-3);
+    justify-items: start;
+  }
+
+  .rejilla :global(.logo-pie) {
+    width: 12rem;
+  }
+
+  h2 {
+    margin-bottom: var(--esp-2);
+    color: var(--color-texto);
+    font-size: var(--texto-base);
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--alto-tactil);
+    font-weight: var(--peso-medio);
+  }
+
+  .legal {
+    margin-top: var(--esp-6);
+    padding-top: var(--esp-4);
+    border-top: 1px solid var(--color-borde);
+    font-size: var(--texto-sm);
+  }
+
+  @media (min-width: 48rem) {
+    .rejilla {
+      grid-template-columns: 1.4fr 1fr 1fr;
+    }
+  }
+</style>

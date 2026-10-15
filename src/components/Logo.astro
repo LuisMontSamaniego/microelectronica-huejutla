@@ -1,0 +1,48 @@
+---
+// Logo horizontal: chip a la izquierda y el nombre en dos líneas, en Montserrat.
+// textLength fija el ancho de las dos líneas para que siempre midan lo mismo,
+// aunque la fuente todavía no haya cargado.
+import Chip from './Chip.astro';
+
+interface Props {
+  class?: string;
+}
+
+const { class: clase } = Astro.props;
+---
+
+<svg
+  viewBox="0 0 336 88"
+  class:list={['logo', clase]}
+  role="img"
+  aria-label="Microelectrónica Huejutla"
+  focusable="false"
+>
+  <Chip x="0" y="0" width="88" height="88" />
+  <text x="104" y="32" textLength="230" lengthAdjust="spacing" class="linea-1">MICROELECTRÓNICA</text>
+  <text x="104" y="71" textLength="230" lengthAdjust="spacing" class="linea-2">HUEJUTLA</text>
+</svg>
+
+<style>
+  .logo {
+    display: block;
+    height: auto;
+    overflow: visible;
+  }
+
+  text {
+    font-family: var(--fuente);
+  }
+
+  .linea-1 {
+    fill: var(--color-acento);
+    font-size: 20.5px;
+    font-weight: var(--peso-medio);
+  }
+
+  .linea-2 {
+    fill: var(--color-texto);
+    font-size: 41px;
+    font-weight: var(--peso-negrita);
+  }
+</style>

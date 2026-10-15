@@ -1,0 +1,94 @@
+---
+// Sección de página con título en una o dos líneas, como en los pósters:
+// la primera en cian y la segunda en blanco. Si recibe un mensaje de WhatsApp,
+// termina con el botón para cotizar.
+import BotonWhatsApp from './BotonWhatsApp.astro';
+import CircuitoOrilla from './CircuitoOrilla.astro';
+
+interface Props {
+  id?: string;
+  titulo: string;
+  segundaLinea?: string;
+  introduccion?: string;
+  fondo?: 'base' | 'superficie';
+  circuito?: 'izquierda' | 'derecha';
+  mensajeWhatsApp?: string;
+  textoBoton?: string;
+}
+
+const {
+  id,
+  titulo,
+  segundaLinea,
+  introduccion,
+  fondo = 'base',
+  circuito,
+  mensajeWhatsApp,
+  textoBoton,
+} = Astro.props;
+
+const idTitulo = `${id ?? titulo.toLowerCase().replace(/[^a-z0-9áéíóúñ]+/g, '-')}-titulo`;
+---
+
+<section id={id} class:list={['seccion', fondo]} aria-labelledby={idTitulo}>
+  {circuito && <CircuitoOrilla lado={circuito} />}
+  <div class="contenedor">
+    <div class="cabecera">
+      <h2 id={idTitulo} class:list={{ 'dos-lineas': segundaLinea }}>
+        <span>{titulo}</span>
+        {segundaLinea && <span>{segundaLinea}</span>}
+      </h2>
+      {introduccion && <p>{introduccion}</p>}
+    </div>
+    <slot />
+    {
+      mensajeWhatsApp && (
+        <div class="accion">
+          <BotonWhatsApp mensaje={mensajeWhatsApp} texto={textoBoton} />
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .seccion {
+    position: relative;
+    padding-block: var(--esp-seccion);
+  }
+
+  .superficie {
+    background: var(--color-superficie);
+  }
+
+  .contenedor {
+    position: relative;
+  }
+
+  .cabecera {
+    max-width: var(--ancho-texto);
+    margin-bottom: var(--esp-6);
+  }
+
+  h2 {
+    font-size: var(--titulo-2);
+  }
+
+  h2 span {
+    display: block;
+  }
+
+  .dos-lineas span:first-child {
+    color: var(--color-acento);
+  }
+
+  .cabecera p {
+    margin-top: var(--esp-4);
+    color: var(--color-texto-suave);
+    font-size: var(--texto-lg);
+  }
+
+  .accion {
+    margin-top: var(--esp-7);
+  }
+</style>
