@@ -1,7 +1,8 @@
 {
-  "name": "web",
+  "name": "microelectronica-huejutla",
   "type": "module",
   "version": "0.0.1",
+  "private": true,
   "engines": {
     "node": ">=22.22.0"
   },
