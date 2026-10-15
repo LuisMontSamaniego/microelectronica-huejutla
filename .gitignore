@@ -12,6 +12,10 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# Archivos privados del espacio de trabajo, por si alguno se copia aquí por error
+CLAUDE.local.md
+*.local.*
+
 # Variables de entorno: nunca se suben, salvo el ejemplo
 .env
 .env.*
