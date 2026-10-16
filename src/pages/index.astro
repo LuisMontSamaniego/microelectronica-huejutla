@@ -9,7 +9,8 @@ import SelloExperiencia from '../components/SelloExperiencia.astro';
 import Condiciones from '../components/Condiciones.astro';
 import DatosContacto from '../components/DatosContacto.astro';
 import { negocio } from '../data/negocio';
-// Recorte de la franja de aparatos del póster general; se cambia por fotos reales en la Fase 5.
+// Franja de aparatos en alta calidad (2672 × 900, sin metadatos); se cambia por fotos reales en la Fase 5.
+// Va con loading="eager" pero sin prioridad alta: el LCP es el texto y así no le gana el ancho de banda a la fuente.
 import aparatos from '../assets/marca/aparatos.jpg';
 ---
 
@@ -25,10 +26,11 @@ import aparatos from '../assets/marca/aparatos.jpg';
       <Picture
         src={aparatos}
         formats={['avif', 'webp']}
-        widths={[480, 800, 1200, aparatos.width]}
+        widths={[480, 800, 1200, 1600, 2304]}
         sizes="(min-width: 77rem) 72rem, calc(100vw - 2rem)"
+        quality="high"
         alt="Pantalla, bocina, microondas, licuadora, ventilador y plancha, con el sello de 40 años de experiencia familiar"
-        priority
+        loading="eager"
       />
     </div>
   </Portada>
@@ -89,12 +91,12 @@ import aparatos from '../assets/marca/aparatos.jpg';
   .escenario :global(img) {
     width: 100%;
     -webkit-mask-image:
-      linear-gradient(90deg, transparent, #000 4% 96%, transparent),
-      linear-gradient(#000 82%, transparent);
+      linear-gradient(90deg, transparent, #000 2.5% 97.5%, transparent),
+      linear-gradient(#000 92%, transparent);
     -webkit-mask-composite: source-in;
     mask-image:
-      linear-gradient(90deg, transparent, #000 4% 96%, transparent),
-      linear-gradient(#000 82%, transparent);
+      linear-gradient(90deg, transparent, #000 2.5% 97.5%, transparent),
+      linear-gradient(#000 92%, transparent);
     mask-composite: intersect;
   }
 

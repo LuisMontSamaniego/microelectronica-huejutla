@@ -10,8 +10,8 @@ export const negocio = {
   puntoDeAtencion: 'Parque de Poblamiento',
   ciudad: 'Huejutla de Reyes',
   estado: 'Hidalgo',
-  // No hay horario fijo: los equipos se reciben con cita.
-  atencion: 'Con cita por WhatsApp',
+  // De lunes a viernes, siempre con cita (decisión de Luis del 15 de octubre).
+  atencion: 'De lunes a viernes, con cita por WhatsApp',
   // Si se vacía, el enlace deja de mostrarse en el pie y en contacto.
   facebook: 'https://www.facebook.com/profile.php?id=61595159373567',
   mensajeGeneral:
