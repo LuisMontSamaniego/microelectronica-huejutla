@@ -1,0 +1,100 @@
+---
+// Cómo escribirnos y dónde recibimos los equipos.
+// Con `completo` (página de contacto) agrega cómo llegar y la página de Facebook.
+import { negocio, enlaceWhatsApp, enlaceMapa } from '../data/negocio';
+
+interface Props {
+  completo?: boolean;
+}
+
+const { completo = false } = Astro.props;
+---
+
+<dl class:list={['datos', { completo }]}>
+  <div>
+    <dt>WhatsApp</dt>
+    <dd>
+      <a
+        href={enlaceWhatsApp()}
+        class="telefono"
+        aria-label={`Escribir por WhatsApp al ${negocio.telefono}`}>{negocio.telefono}</a
+      >
+    </dd>
+  </div>
+  <div>
+    <dt>Atención</dt>
+    <dd>{negocio.atencion}. Escríbenos para acordar el día y la hora.</dd>
+  </div>
+  <div>
+    <dt>Recepción de equipos</dt>
+    <dd>
+      {negocio.puntoDeAtencion}<br />
+      {negocio.ciudad}, {negocio.estado}
+      {completo && <a href={enlaceMapa()} class="enlace">Cómo llegar en Google Maps</a>}
+    </dd>
+  </div>
+  {
+    completo && negocio.facebook && (
+      <div>
+        <dt>Facebook</dt>
+        <dd>
+          <a href={negocio.facebook} class="enlace">
+            Página de {negocio.nombre}
+          </a>
+        </dd>
+      </div>
+    )
+  }
+</dl>
+
+<style>
+  .datos {
+    display: grid;
+    gap: var(--esp-6);
+  }
+
+  .datos > div {
+    display: grid;
+    align-content: start;
+    gap: var(--esp-2);
+    padding-top: var(--esp-4);
+    border-top: 1px solid var(--color-borde);
+  }
+
+  dt {
+    color: var(--color-texto-suave);
+    font-size: var(--texto-sm);
+    font-weight: var(--peso-medio);
+  }
+
+  dd {
+    max-width: 30ch;
+  }
+
+  .telefono {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--alto-tactil);
+    font-size: var(--titulo-3);
+    font-weight: var(--peso-negrita);
+    white-space: nowrap;
+  }
+
+  .enlace {
+    display: flex;
+    align-items: center;
+    min-height: var(--alto-tactil);
+    font-weight: var(--peso-medio);
+  }
+
+  @media (min-width: 48rem) {
+    .datos {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* Dos columnas en tableta y hasta cuatro en escritorio; si no hay Facebook, no queda un hueco */
+    .completo {
+      grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    }
+  }
+</style>

@@ -1,0 +1,58 @@
+---
+// Lo que la web promete: diagnóstico, garantía y tiempo de entrega (data/negocio.ts).
+// Cada punto lleva un pad de circuito, como las viñetas de los pósters.
+import { condiciones } from '../data/negocio';
+
+interface Props {
+  class?: string;
+}
+
+const { class: clase } = Astro.props;
+---
+
+<ul class:list={['condiciones', clase]}>
+  {
+    condiciones.map(({ titulo, texto }) => (
+      <li>
+        <strong>{titulo}</strong>
+        <span>{texto}</span>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .condiciones {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--esp-5);
+  }
+
+  li {
+    position: relative;
+    display: grid;
+    gap: var(--esp-1);
+    padding-left: 2rem;
+  }
+
+  li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.3em;
+    width: 1.1rem;
+    height: 1.1rem;
+    border: 3px solid var(--color-acento);
+    border-radius: 50%;
+  }
+
+  strong {
+    font-size: var(--texto-lg);
+    line-height: var(--interlineado-titulo);
+  }
+
+  span {
+    color: var(--color-texto-suave);
+  }
+</style>

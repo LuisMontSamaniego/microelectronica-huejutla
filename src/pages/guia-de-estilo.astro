@@ -6,9 +6,10 @@ import Logo from '../components/Logo.astro';
 import Chip from '../components/Chip.astro';
 import SelloExperiencia from '../components/SelloExperiencia.astro';
 import BotonWhatsApp from '../components/BotonWhatsApp.astro';
-import TarjetaServicio from '../components/TarjetaServicio.astro';
+import ListaServicios from '../components/ListaServicios.astro';
 import Pasos from '../components/Pasos.astro';
-import { servicioDestacado, otrosServicios } from '../data/servicios';
+import Condiciones from '../components/Condiciones.astro';
+import DatosContacto from '../components/DatosContacto.astro';
 
 const colores = [
   { nombre: 'Fondo', variable: '--color-fondo', hex: '#0F2A44', uso: 'Fondo de todo el sitio' },
@@ -92,17 +93,24 @@ const escala = [
     mensajeWhatsApp="Hola, quiero cotizar la reparación de un aparato. Les envío foto y la falla."
   />
 
-  <Seccion id="servicios" titulo="Servicios" introduccion="El servicio principal va destacado; los demás, como lista.">
-    <div class="servicios">
-      <TarjetaServicio servicio={servicioDestacado} />
-      <div class="filas">
-        {otrosServicios.map((s) => <TarjetaServicio servicio={s} />)}
-      </div>
-    </div>
+  <Seccion id="servicios" titulo="Servicios" introduccion="ListaServicios: el servicio principal va destacado; los demás, como lista.">
+    <ListaServicios />
   </Seccion>
 
-  <Seccion id="como-funciona" titulo="Cómo funciona" fondo="superficie">
+  <Seccion id="filas" titulo="Solo filas" introduccion="ListaServicios sin destacada, como en «Otros servicios» y en la página 404." fondo="superficie">
+    <ListaServicios destacada={false} actual="pantallas" />
+  </Seccion>
+
+  <Seccion id="como-funciona" titulo="Cómo funciona">
     <Pasos />
+  </Seccion>
+
+  <Seccion id="condiciones" titulo="Condiciones" introduccion="Lo que la web promete, desde data/negocio.ts." fondo="superficie">
+    <Condiciones />
+  </Seccion>
+
+  <Seccion id="datos-contacto" titulo="Datos de contacto" introduccion="Resumidos en el inicio y completos (con Maps y Facebook) en /contacto.">
+    <DatosContacto completo />
   </Seccion>
 </Base>
 
@@ -183,21 +191,5 @@ const escala = [
     flex-wrap: wrap;
     align-items: center;
     gap: var(--esp-4);
-  }
-
-  .servicios {
-    display: grid;
-    gap: var(--esp-7);
-  }
-
-  .filas {
-    border-bottom: 1px solid var(--color-borde);
-  }
-
-  @media (min-width: 64rem) {
-    .servicios {
-      grid-template-columns: 1.15fr 1fr;
-      align-items: start;
-    }
   }
 </style>

@@ -1,0 +1,42 @@
+---
+// Los servicios en el formato decidido en la Fase 2: Pantallas como tarjeta destacada
+// y los demás como filas. Sin la destacada (por ejemplo, en "Otros servicios" o en la 404),
+// todos van como filas, y `actual` quita el servicio de la página en la que estamos.
+import TarjetaServicio from './TarjetaServicio.astro';
+import { servicios, servicioDestacado, otrosServicios } from '../data/servicios';
+
+interface Props {
+  destacada?: boolean;
+  /** Slug del servicio que no se lista (el de la página actual) */
+  actual?: string;
+}
+
+const { destacada = true, actual } = Astro.props;
+
+const filas = destacada ? otrosServicios : servicios.filter((s) => s.slug !== actual);
+---
+
+<div class:list={['servicios', { 'con-destacada': destacada }]}>
+  {destacada && <TarjetaServicio servicio={servicioDestacado} variante="destacada" />}
+  <div class="filas">
+    {filas.map((servicio) => <TarjetaServicio servicio={servicio} variante="fila" />)}
+  </div>
+</div>
+
+<style>
+  .servicios {
+    display: grid;
+    gap: var(--esp-7);
+  }
+
+  .filas {
+    border-bottom: 1px solid var(--color-borde);
+  }
+
+  @media (min-width: 64rem) {
+    .con-destacada {
+      grid-template-columns: 1.15fr 1fr;
+      align-items: start;
+    }
+  }
+</style>

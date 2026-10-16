@@ -1,50 +1,146 @@
 ---
-// Provisional hasta la Fase 3: ya usa el layout, la marca y el botón de WhatsApp.
+import { Picture } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import BotonWhatsApp from '../components/BotonWhatsApp.astro';
+import Portada from '../components/Portada.astro';
+import Seccion from '../components/Seccion.astro';
+import ListaServicios from '../components/ListaServicios.astro';
+import Pasos from '../components/Pasos.astro';
+import SelloExperiencia from '../components/SelloExperiencia.astro';
+import Condiciones from '../components/Condiciones.astro';
+import DatosContacto from '../components/DatosContacto.astro';
 import { negocio } from '../data/negocio';
+// Recorte de la franja de aparatos del póster general; se cambia por fotos reales en la Fase 5.
+import aparatos from '../assets/marca/aparatos.jpg';
 ---
 
 <Base
   titulo={negocio.nombre}
-  descripcion="Reparación de pantallas, bocinas, microondas y más en Huejutla de Reyes. 40 años de experiencia familiar."
+  descripcion="Reparación de pantallas, bocinas, microondas y más en Huejutla de Reyes. 40 años de experiencia familiar. Mándanos foto por WhatsApp y te cotizamos."
 >
-  <div class="contenedor provisional">
-    <h1>
-      <span>¿Tu aparato</span>
-      <span>dejó de funcionar?</span>
-    </h1>
-    <p>
-      Estamos terminando la página. Mientras tanto, mándanos foto de tu aparato por WhatsApp y te
-      cotizamos.
+  <Portada
+    titulo={['¿Tu aparato', 'dejó de funcionar?']}
+    entrada={`Reparamos pantallas, bocinas, microondas, licuadoras, planchas, ventiladores y más en ${negocio.ciudad}. Mándanos foto de tu aparato por WhatsApp y te cotizamos.`}
+  >
+    <div class="escenario">
+      <Picture
+        src={aparatos}
+        formats={['avif', 'webp']}
+        widths={[480, 800, 1200, aparatos.width]}
+        sizes="(min-width: 77rem) 72rem, calc(100vw - 2rem)"
+        alt="Pantalla, bocina, microondas, licuadora, ventilador y plancha, con el sello de 40 años de experiencia familiar"
+        priority
+      />
+    </div>
+  </Portada>
+
+  <Seccion
+    id="servicios"
+    titulo="No lo tires,"
+    segundaLinea="¡tiene reparación!"
+    introduccion="Elige tu aparato para ver las fallas que reparamos."
+  >
+    <ListaServicios />
+    <p class="nota">
+      ¿Tu aparato no está en la lista? Mándanos foto y te decimos si lo reparamos.
     </p>
-    <BotonWhatsApp tamano="grande" />
-  </div>
+  </Seccion>
+
+  <Seccion
+    id="como-funciona"
+    titulo="Cómo funciona"
+    fondo="superficie"
+    mensajeWhatsApp={negocio.mensajeGeneral}
+  >
+    <Pasos />
+  </Seccion>
+
+  <Seccion
+    id="experiencia"
+    titulo="Antes de comprar otro,"
+    segundaLinea="tráelo a revisar"
+    circuito="derecha"
+    mensajeWhatsApp={negocio.mensajeGeneral}
+  >
+    <div class="experiencia">
+      <SelloExperiencia class="sello" />
+      <Condiciones />
+    </div>
+  </Seccion>
+
+  <Seccion
+    id="ubicacion"
+    titulo="¿Dónde recibimos"
+    segundaLinea="tu equipo?"
+  >
+    <DatosContacto />
+    <p class="mas">
+      <a href="/contacto">Ver contacto y ubicación</a>
+    </p>
+  </Seccion>
 </Base>
 
 <style>
-  .provisional {
-    display: grid;
-    gap: var(--esp-5);
-    justify-items: start;
-    padding-block: var(--esp-seccion);
+  /* La franja de aparatos se funde con el fondo por las orillas, como en el póster */
+  .escenario {
+    justify-self: stretch;
+    margin-top: var(--esp-4);
   }
 
-  h1 {
-    font-size: var(--titulo-1);
+  .escenario :global(img) {
+    width: 100%;
+    -webkit-mask-image:
+      linear-gradient(90deg, transparent, #000 4% 96%, transparent),
+      linear-gradient(#000 82%, transparent);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(90deg, transparent, #000 4% 96%, transparent),
+      linear-gradient(#000 82%, transparent);
+    mask-composite: intersect;
   }
 
-  h1 span {
-    display: block;
-  }
-
-  h1 span:first-child {
-    color: var(--color-acento);
-  }
-
-  p {
+  .nota {
+    margin-top: var(--esp-6);
     max-width: var(--ancho-texto);
-    font-size: var(--texto-lg);
     color: var(--color-texto-suave);
+  }
+
+  .experiencia {
+    display: grid;
+    gap: var(--esp-6);
+    justify-items: start;
+  }
+
+  .experiencia :global(.sello) {
+    width: 9rem;
+  }
+
+  .mas {
+    margin-top: var(--esp-5);
+  }
+
+  .mas a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--alto-tactil);
+    font-weight: var(--peso-medio);
+  }
+
+  @media (min-width: 48rem) {
+    .experiencia {
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      column-gap: var(--esp-8);
+    }
+
+    .experiencia :global(.sello) {
+      width: 12rem;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .experiencia :global(.condiciones) {
+      grid-template-columns: repeat(3, 1fr);
+      column-gap: var(--esp-6);
+    }
   }
 </style>

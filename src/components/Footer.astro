@@ -19,6 +19,7 @@ const anio = new Date().getFullYear();
         {negocio.puntoDeAtencion}<br />
         {negocio.ciudad}, {negocio.estado}
       </p>
+      <p class="atencion">{negocio.atencion}</p>
     </div>
 
     <div>
@@ -70,6 +71,10 @@ const anio = new Date().getFullYear();
     margin-bottom: var(--esp-2);
     color: var(--color-texto);
     font-size: var(--texto-base);
+  }
+
+  .atencion {
+    margin-top: var(--esp-2);
   }
 
   ul {

@@ -1,0 +1,55 @@
+---
+// Página para direcciones que no existen. Astro la compila como 404.html y Vercel la usa sola.
+import Base from '../layouts/Base.astro';
+import Portada from '../components/Portada.astro';
+import Seccion from '../components/Seccion.astro';
+import ListaServicios from '../components/ListaServicios.astro';
+---
+
+<Base
+  titulo="Página no encontrada"
+  descripcion="Esta página no existe. Mándanos foto de tu aparato por WhatsApp y te cotizamos."
+  indexar={false}
+>
+  <Portada
+    titulo={['Esta página', 'no existe']}
+    entrada="Revisa que la dirección esté bien escrita o vuelve al inicio. Si buscabas una reparación, mándanos foto de tu aparato por WhatsApp y te cotizamos."
+  >
+    <!-- Un circuito abierto: la pista se corta a la mitad -->
+    <svg viewBox="0 0 320 40" class="circuito-abierto" slot="arriba" aria-hidden="true" focusable="false">
+      <g fill="none" stroke-width="3" stroke-linecap="round">
+        <path d="M23 20H128" class="pista" />
+        <path d="M192 20H297" class="pista" />
+        <circle cx="14" cy="20" r="9" class="pad" />
+        <circle cx="306" cy="20" r="9" class="pad" />
+      </g>
+      <circle cx="128" cy="20" r="4" class="punta" />
+      <circle cx="192" cy="20" r="4" class="punta" />
+    </svg>
+    <a href="/" slot="acciones">Volver al inicio</a>
+  </Portada>
+
+  <Seccion id="servicios" titulo="Lo que reparamos">
+    <ListaServicios destacada={false} />
+  </Seccion>
+</Base>
+
+<style>
+  .circuito-abierto {
+    width: min(100%, 20rem);
+    height: auto;
+    margin-bottom: var(--esp-2);
+  }
+
+  .pista {
+    stroke: var(--color-traza);
+  }
+
+  .pad {
+    stroke: var(--color-acento);
+  }
+
+  .punta {
+    fill: var(--color-acento);
+  }
+</style>

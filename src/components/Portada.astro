@@ -1,0 +1,89 @@
+---
+// Arranque de cada página: el único <h1>, en dos líneas como los pósters (la primera en cian),
+// una entrada corta y el botón para cotizar por WhatsApp.
+// Slots: "arriba" (por ejemplo, la ruta de migas), "acciones" (un enlace junto al botón)
+// y el predeterminado, que va al final (por ejemplo, la imagen del inicio).
+import BotonWhatsApp from './BotonWhatsApp.astro';
+import CircuitoOrilla from './CircuitoOrilla.astro';
+
+interface Props {
+  titulo: [string, string];
+  entrada?: string;
+  mensajeWhatsApp?: string;
+  textoBoton?: string;
+  circuito?: 'izquierda' | 'derecha';
+}
+
+const { titulo, entrada, mensajeWhatsApp, textoBoton, circuito } = Astro.props;
+---
+
+<div class="portada">
+  {circuito && <CircuitoOrilla lado={circuito} />}
+  <div class="contenedor">
+    <slot name="arriba" />
+    <h1>
+      <span>{titulo[0]}</span>
+      <span>{titulo[1]}</span>
+    </h1>
+    {entrada && <p class="entrada">{entrada}</p>}
+    <div class="acciones">
+      <BotonWhatsApp mensaje={mensajeWhatsApp} texto={textoBoton} tamano="grande" />
+      <slot name="acciones" />
+    </div>
+    <slot />
+  </div>
+</div>
+
+<style>
+  .portada {
+    position: relative;
+    /* Sin relleno abajo: la sección siguiente ya pone el espacio */
+    padding-top: var(--esp-7);
+  }
+
+  .contenedor {
+    position: relative;
+    display: grid;
+    gap: var(--esp-5);
+    justify-items: start;
+  }
+
+  h1 {
+    font-size: var(--titulo-1);
+  }
+
+  h1 span {
+    display: block;
+  }
+
+  h1 span:first-child {
+    color: var(--color-acento);
+  }
+
+  .entrada {
+    max-width: var(--ancho-texto);
+    font-size: var(--texto-lg);
+    color: var(--color-texto-suave);
+  }
+
+  .acciones {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--esp-4) var(--esp-5);
+  }
+
+  /* Enlaces de texto junto al botón, con el alto táctil mínimo */
+  .acciones :global(a:not(.boton)) {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--alto-tactil);
+    font-weight: var(--peso-medio);
+  }
+
+  @media (min-width: 48rem) {
+    .portada {
+      padding-top: var(--esp-8);
+    }
+  }
+</style>

@@ -16,10 +16,33 @@ export interface Servicio {
   mensajeWhatsApp: string;
   /** El servicio principal del negocio: se muestra primero y con más detalle */
   destacado?: boolean;
+  /** Qué mandar por WhatsApp para cotizar más rápido */
+  paraCotizar?: string[];
+  /** Una prueba sencilla que el cliente puede hacer en casa antes de escribir */
+  consejo?: Consejo;
+}
+
+export interface Consejo {
+  /** Pregunta en dos líneas, como los títulos de los pósters */
+  titulo: [string, string];
+  /** Nombre de la prueba, encima de los pasos */
+  nombre: string;
+  entrada: string;
+  pasos: string[];
+  resultado: string;
+  aviso: string;
+  mensajeWhatsApp: string;
 }
 
 const mensaje = (aparato: string) =>
   `Hola, quiero cotizar la reparación de mi ${aparato}. Les envío foto y la falla.`;
+
+/** Lo que pide el mensaje de bienvenida de WhatsApp; un servicio puede pedir algo más concreto. */
+export const paraCotizarGeneral = [
+  'Una foto de tu aparato',
+  'La falla que presenta',
+  'La marca y modelo, si los tienes a la mano',
+];
 
 export const servicios: Servicio[] = [
   {
@@ -38,6 +61,27 @@ export const servicios: Servicio[] = [
     cierre: '¡Nosotros la reparamos!',
     mensajeWhatsApp: mensaje('pantalla'),
     destacado: true,
+    paraCotizar: [
+      'Una foto de la pantalla, encendida si se puede, donde se vea la falla',
+      'Una foto de la etiqueta de atrás, con la marca y el modelo',
+      'Cuántas pulgadas tiene, si lo sabes',
+    ],
+    // La prueba de la linterna (docs/canales-y-lanzamiento.md, ideas de contenido).
+    consejo: {
+      titulo: ['¿Se escucha', 'pero no se ve?'],
+      nombre: 'La prueba de la linterna',
+      entrada: 'Haz la prueba de la linterna antes de escribirnos. Toma un minuto y nos ayuda a saber qué tiene tu pantalla.',
+      pasos: [
+        'Enciende la pantalla y pon algo que tenga sonido.',
+        'Apaga la luz del cuarto.',
+        'Acerca la linterna de tu celular a la pantalla y mira con atención.',
+      ],
+      resultado:
+        'Si alcanzas a ver la imagen, aunque sea muy tenue, la falla suele estar en la iluminación, y por lo general tiene reparación. Si no ves nada, mándanos foto de todos modos y la revisamos.',
+      aviso: 'No abras la pantalla: la prueba se hace por fuera.',
+      mensajeWhatsApp:
+        'Hola, mi pantalla se escucha pero no se ve. Hice la prueba de la linterna y les envío foto.',
+    },
   },
   {
     slug: 'bocinas',

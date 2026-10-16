@@ -1,0 +1,254 @@
+---
+// Una página por servicio, generada al compilar a partir de data/servicios.ts.
+import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
+import Base from '../../layouts/Base.astro';
+import Portada from '../../components/Portada.astro';
+import Seccion from '../../components/Seccion.astro';
+import Pasos from '../../components/Pasos.astro';
+import Condiciones from '../../components/Condiciones.astro';
+import ListaServicios from '../../components/ListaServicios.astro';
+import { servicios, paraCotizarGeneral } from '../../data/servicios';
+import { negocio } from '../../data/negocio';
+
+export const getStaticPaths = (() =>
+  servicios.map((servicio) => ({
+    params: { slug: servicio.slug },
+    props: { servicio },
+  }))) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { servicio } = Astro.props;
+const { slug, nombre, titulo, fallas, gancho, cierre, mensajeWhatsApp, consejo } = servicio;
+const paraCotizar = servicio.paraCotizar ?? paraCotizarGeneral;
+
+// La descripción sale de las fallas y no del gancho, que en licuadoras es de temporada.
+// Dos fallas bastan para quedar por debajo de los 160 caracteres que muestra Google.
+const enMinuscula = (texto: string) => texto.charAt(0).toLowerCase() + texto.slice(1);
+const descripcion = `Reparación de ${nombre.toLowerCase()} en ${negocio.ciudad}: ${fallas
+  .slice(0, 2)
+  .map(enMinuscula)
+  .join(', ')} y más. Mándanos foto por WhatsApp y te cotizamos.`;
+---
+
+<Base
+  titulo={`Reparación de ${nombre.toLowerCase()} en Huejutla`}
+  descripcion={descripcion}
+  mensajeWhatsApp={mensajeWhatsApp}
+>
+  <Portada titulo={titulo} entrada={gancho} mensajeWhatsApp={mensajeWhatsApp} circuito="derecha">
+    <nav aria-label="Ruta" class="migas" slot="arriba">
+      <ol>
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/#servicios">Servicios</a></li>
+        <li aria-current="page">{nombre}</li>
+      </ol>
+    </nav>
+  </Portada>
+
+  <Seccion
+    id="fallas"
+    titulo="Fallas que reparamos"
+    mensajeWhatsApp={mensajeWhatsApp}
+  >
+    <div class="fallas">
+      <div>
+        <ul class="lista-fallas grande">
+          {fallas.map((falla) => <li>{falla}</li>)}
+        </ul>
+        <p class="cierre">{cierre}</p>
+      </div>
+      <div class="para-cotizar">
+        <h3>Para cotizar más rápido, mándanos:</h3>
+        <ul class="lista-fallas">
+          {paraCotizar.map((dato) => <li>{dato}</li>)}
+        </ul>
+      </div>
+    </div>
+  </Seccion>
+
+  {
+    consejo && (
+      <Seccion
+        id="consejo"
+        titulo={consejo.titulo[0]}
+        segundaLinea={consejo.titulo[1]}
+        introduccion={consejo.entrada}
+        fondo="superficie"
+        circuito="izquierda"
+        mensajeWhatsApp={consejo.mensajeWhatsApp}
+      >
+        <div class="consejo">
+          <div>
+            <h3>{consejo.nombre}</h3>
+            <ol class="prueba">
+              {consejo.pasos.map((paso) => <li>{paso}</li>)}
+            </ol>
+          </div>
+          <div class="resultado">
+            <p>{consejo.resultado}</p>
+            <p class="aviso">{consejo.aviso}</p>
+          </div>
+        </div>
+      </Seccion>
+    )
+  }
+
+  <Seccion
+    id="como-funciona"
+    titulo="Cómo funciona"
+    fondo={consejo ? 'base' : 'superficie'}
+    mensajeWhatsApp={mensajeWhatsApp}
+  >
+    <Pasos />
+    <div class="condiciones-servicio">
+      <Condiciones />
+    </div>
+  </Seccion>
+
+  <Seccion id="otros-servicios" titulo="Otros servicios">
+    <ListaServicios destacada={false} actual={slug} />
+  </Seccion>
+</Base>
+
+<style>
+  /* Ruta de migas: Inicio / Servicios / Pantallas */
+  .migas ol {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: var(--esp-2);
+    font-size: var(--texto-sm);
+    color: var(--color-texto-suave);
+  }
+
+  .migas li {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--esp-2);
+  }
+
+  /* El separador es decorativo: el texto alternativo vacío evita que el lector de pantalla diga "barra" */
+  .migas li + li::before {
+    content: '/';
+    content: '/' / '';
+    color: var(--color-borde);
+  }
+
+  .migas a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--alto-tactil);
+    font-weight: var(--peso-medio);
+  }
+
+  .migas [aria-current='page'] {
+    color: var(--color-texto);
+  }
+
+  /* Fallas y qué mandar para cotizar */
+  .fallas {
+    display: grid;
+    gap: var(--esp-7);
+  }
+
+  .grande {
+    font-size: var(--texto-lg);
+  }
+
+  .cierre {
+    margin-top: var(--esp-5);
+    color: var(--color-acento);
+    font-size: var(--titulo-3);
+    font-weight: var(--peso-negrita);
+  }
+
+  .para-cotizar {
+    display: grid;
+    gap: var(--esp-4);
+    align-content: start;
+    padding: var(--esp-5) var(--esp-4);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-md);
+  }
+
+  h3 {
+    font-size: var(--titulo-3);
+  }
+
+  /* La prueba de la linterna */
+  .consejo {
+    display: grid;
+    gap: var(--esp-6);
+  }
+
+  .prueba {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--esp-4);
+    display: grid;
+    gap: var(--esp-4);
+    counter-reset: paso;
+  }
+
+  .prueba li {
+    position: relative;
+    padding-left: 2.75rem;
+    counter-increment: paso;
+  }
+
+  .prueba li::before {
+    content: counter(paso);
+    position: absolute;
+    left: 0;
+    top: -0.1rem;
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border: 2px solid var(--color-acento);
+    border-radius: 50%;
+    color: var(--color-acento);
+    font-weight: var(--peso-negrita);
+    font-size: var(--texto-sm);
+  }
+
+  .resultado {
+    display: grid;
+    gap: var(--esp-4);
+    align-content: start;
+    padding-left: var(--esp-5);
+    border-left: 3px solid var(--color-acento);
+    font-size: var(--texto-lg);
+  }
+
+  .aviso {
+    color: var(--color-texto-suave);
+    font-size: var(--texto-base);
+  }
+
+  .condiciones-servicio {
+    margin-top: var(--esp-8);
+  }
+
+  @media (min-width: 48rem) {
+    .para-cotizar {
+      padding: var(--esp-6);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .fallas,
+    .consejo {
+      grid-template-columns: 1fr 1fr;
+      column-gap: var(--esp-8);
+    }
+
+    .condiciones-servicio :global(.condiciones) {
+      grid-template-columns: repeat(3, 1fr);
+      column-gap: var(--esp-6);
+    }
+  }
+</style>

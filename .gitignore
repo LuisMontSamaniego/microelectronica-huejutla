@@ -15,6 +15,9 @@ pnpm-debug.log*
 # Archivos privados del espacio de trabajo, por si alguno se copia aquí por error
 CLAUDE.local.md
 *.local.*
+# Configuración de Claude y capturas de Playwright, si alguna vez se trabaja con web/ como carpeta
+.claude/
+.playwright-mcp/
 
 # Variables de entorno: nunca se suben, salvo el ejemplo
 .env

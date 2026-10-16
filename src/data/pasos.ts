@@ -1,5 +1,5 @@
 // Cómo funciona, en el orden del plan: foto, cotización, recepción y entrega.
-// Borrador para la Fase 3: pasa por el revisor de marca antes de publicarse.
+// Revisado por el revisor de marca el 15 de octubre.
 import { negocio } from './negocio';
 
 export interface Paso {
@@ -10,7 +10,8 @@ export interface Paso {
 export const pasos: Paso[] = [
   {
     titulo: 'Mándanos foto',
-    texto: 'Por WhatsApp, con la falla que presenta y, si los tienes a la mano, la marca y el modelo.',
+    texto:
+      'Por WhatsApp: una foto de tu aparato, la falla que presenta y, si los tienes a la mano, la marca y el modelo.',
   },
   {
     titulo: 'Te cotizamos',
@@ -18,10 +19,10 @@ export const pasos: Paso[] = [
   },
   {
     titulo: 'Recibimos tu equipo',
-    texto: `En el ${negocio.puntoDeAtencion}, ${negocio.ciudad}.`,
+    texto: `Acordamos el día y la hora por WhatsApp y lo recibimos en el ${negocio.puntoDeAtencion}, ${negocio.ciudad}.`,
   },
   {
     titulo: 'Te lo entregamos funcionando',
-    texto: 'Te avisamos por WhatsApp cuando esté listo.',
+    texto: 'Te avisamos por WhatsApp cuando esté listo para que pases por él.',
   },
 ];

@@ -3,6 +3,10 @@ import { defineConfig, fontProviders } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
+  build: {
+    // El CSS completo pesa unos 8 kB: va dentro del HTML para no bloquear el primer render con datos móviles.
+    inlineStylesheets: 'always',
+  },
   fonts: [
     {
       // Se descarga al compilar y se sirve desde el propio sitio.

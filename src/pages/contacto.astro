@@ -1,0 +1,54 @@
+---
+import Base from '../layouts/Base.astro';
+import Portada from '../components/Portada.astro';
+import Seccion from '../components/Seccion.astro';
+import DatosContacto from '../components/DatosContacto.astro';
+import Condiciones from '../components/Condiciones.astro';
+import { negocio } from '../data/negocio';
+---
+
+<Base
+  titulo="Contacto y ubicación"
+  descripcion={`Escríbenos por WhatsApp al ${negocio.telefono}. Recibimos tu equipo con cita en el ${negocio.puntoDeAtencion}, ${negocio.ciudad}.`}
+>
+  <Portada
+    titulo={['Mándanos foto', 'y te cotizamos']}
+    entrada="Escríbenos por WhatsApp con una foto de tu aparato y la falla que presenta. Te respondemos con la cotización y acordamos el día y la hora para recibirlo."
+    circuito="derecha"
+  />
+
+  <Seccion id="datos" titulo="Contacto y ubicación">
+    <DatosContacto completo />
+  </Seccion>
+
+  <Seccion
+    id="incluye"
+    titulo="Lo que debes saber"
+    fondo="superficie"
+    mensajeWhatsApp={negocio.mensajeGeneral}
+  >
+    <Condiciones />
+    <p class="mas">
+      <a href="/#como-funciona">Ver cómo funciona, paso a paso</a>
+    </p>
+  </Seccion>
+</Base>
+
+<style>
+  .mas {
+    margin-top: var(--esp-6);
+  }
+
+  .mas a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--alto-tactil);
+    font-weight: var(--peso-medio);
+  }
+
+  @media (min-width: 64rem) {
+    .mas {
+      margin-top: var(--esp-7);
+    }
+  }
+</style>
