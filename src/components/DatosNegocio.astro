@@ -1,0 +1,52 @@
+---
+// Datos estructurados LocalBusiness (schema.org) para que Google entienda qué es el negocio y dónde atiende.
+// Solo datos públicos: nombre, teléfono del negocio, zona de servicio, días de atención y Facebook.
+// Sin dueños, fundadores, autor ni dirección exacta. Sin openingHoursSpecification: Google pide horas
+// de apertura y cierre, y la atención es con cita (decisión de Luis del 16 de octubre); los días van en la descripción.
+import { negocio } from '../data/negocio';
+import { servicios, nombreReparacion } from '../data/servicios';
+
+interface Props {
+  /** Dirección completa de la imagen para compartir. */
+  imagen?: string;
+}
+
+const { imagen } = Astro.props;
+const sitio = Astro.site;
+
+const datos = sitio && {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  '@id': new URL('/#negocio', sitio).href,
+  name: negocio.nombre,
+  description: `Servicio técnico en electrónica en ${negocio.ciudad}, ${negocio.estado}: reparación de pantallas, bocinas, microondas, licuadoras, planchas y ventiladores. ${negocio.experiencia}. ${negocio.atencion}.`,
+  url: sitio.href,
+  telephone: `+52 ${negocio.telefono}`,
+  image: imagen,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: negocio.ciudad,
+    addressRegion: negocio.estado,
+    addressCountry: 'MX',
+  },
+  areaServed: {
+    '@type': 'City',
+    name: negocio.ciudad,
+    containedInPlace: { '@type': 'State', name: negocio.estado },
+  },
+  sameAs: negocio.facebook ? [negocio.facebook] : undefined,
+  makesOffer: servicios.map((servicio) => ({
+    '@type': 'Offer',
+    itemOffered: {
+      '@type': 'Service',
+      name: nombreReparacion(servicio),
+      url: new URL(`/servicios/${servicio.slug}`, sitio).href,
+    },
+  })),
+};
+
+// "<" escapado para que ningún texto pueda cerrar la etiqueta <script> antes de tiempo.
+const json = datos && JSON.stringify(datos).replace(/</g, '\\u003c');
+---
+
+{json && <script type="application/ld+json" set:html={json} />}

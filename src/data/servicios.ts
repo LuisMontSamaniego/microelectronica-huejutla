@@ -20,6 +20,8 @@ export interface Servicio {
   paraCotizar?: string[];
   /** Una prueba sencilla que el cliente puede hacer en casa antes de escribir */
   consejo?: Consejo;
+  /** Qué dos fallas van en la descripción para Google (posiciones en `fallas`); por omisión, las dos primeras */
+  fallasEnDescripcion?: [number, number];
 }
 
 export interface Consejo {
@@ -98,6 +100,8 @@ export const servicios: Servicio[] = [
       '¿Tu bocina ya no suena, se escucha distorsionada o no carga? ¡Que no se acabe la fiesta! La reparamos.',
     cierre: '¡Nosotros la reparamos!',
     mensajeWhatsApp: mensaje('bocina'),
+    // "Sin sonido o suena distorsionado" se lee mal en una lista separada por comas.
+    fallasEnDescripcion: [0, 2],
   },
   {
     slug: 'microondas',
@@ -160,6 +164,9 @@ export const servicios: Servicio[] = [
     mensajeWhatsApp: mensaje('ventilador'),
   },
 ];
+
+/** "Reparación de pantallas": título de la página del servicio y nombre en los datos estructurados. */
+export const nombreReparacion = (servicio: Servicio) => `Reparación de ${servicio.nombre.toLowerCase()}`;
 
 export const servicioDestacado = servicios.find((s) => s.destacado) ?? servicios[0];
 export const otrosServicios = servicios.filter((s) => s !== servicioDestacado);

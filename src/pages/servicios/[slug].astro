@@ -7,7 +7,7 @@ import Seccion from '../../components/Seccion.astro';
 import Pasos from '../../components/Pasos.astro';
 import Condiciones from '../../components/Condiciones.astro';
 import ListaServicios from '../../components/ListaServicios.astro';
-import { servicios, paraCotizarGeneral } from '../../data/servicios';
+import { servicios, paraCotizarGeneral, nombreReparacion } from '../../data/servicios';
 import { negocio } from '../../data/negocio';
 
 export const getStaticPaths = (() =>
@@ -25,14 +25,15 @@ const paraCotizar = servicio.paraCotizar ?? paraCotizarGeneral;
 // La descripción sale de las fallas y no del gancho, que en licuadoras es de temporada.
 // Dos fallas bastan para quedar por debajo de los 160 caracteres que muestra Google.
 const enMinuscula = (texto: string) => texto.charAt(0).toLowerCase() + texto.slice(1);
-const descripcion = `Reparación de ${nombre.toLowerCase()} en ${negocio.ciudad}: ${fallas
-  .slice(0, 2)
+const [primera, segunda] = servicio.fallasEnDescripcion ?? [0, 1];
+const descripcion = `Reparación de ${nombre.toLowerCase()} en ${negocio.ciudad}: ${[fallas[primera], fallas[segunda]]
   .map(enMinuscula)
   .join(', ')} y más. Mándanos foto por WhatsApp y te cotizamos.`;
+// El título no repite "en Huejutla": el nombre del negocio ya lo dice, y así no pasa de los 60 caracteres que muestra Google.
 ---
 
 <Base
-  titulo={`Reparación de ${nombre.toLowerCase()} en Huejutla`}
+  titulo={nombreReparacion(servicio)}
   descripcion={descripcion}
   mensajeWhatsApp={mensajeWhatsApp}
 >

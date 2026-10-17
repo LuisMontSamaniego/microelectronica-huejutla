@@ -1,13 +1,16 @@
 ---
-import { Font } from 'astro:assets';
+import { Font, getImage } from 'astro:assets';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import BarraWhatsApp from '../components/BarraWhatsApp.astro';
+import DatosNegocio from '../components/DatosNegocio.astro';
 import { negocio } from '../data/negocio';
+// Imagen para compartir (1200 × 630): la plantilla vive en assets/compartir/ del espacio de trabajo.
+import imagenCompartir from '../assets/marca/compartir.jpg';
 
 interface Props {
-  /** Título de la página; se le agrega el nombre del negocio. */
+  /** Título de la página; se le agrega el nombre del negocio, salvo que ya empiece con él. */
   titulo: string;
   /** Descripción para Google y para cuando se comparte el enlace. */
   descripcion: string;
@@ -19,9 +22,17 @@ interface Props {
 
 const { titulo, descripcion, mensajeWhatsApp, indexar = true } = Astro.props;
 
-const tituloCompleto = titulo === negocio.nombre ? titulo : `${titulo} | ${negocio.nombre}`;
-// La dirección canónica se activa cuando `site` esté en astro.config (Fase 4).
-const canonica = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+const tituloCompleto = titulo.startsWith(negocio.nombre) ? titulo : `${titulo} | ${negocio.nombre}`;
+
+// Al compilar, Astro.url.pathname trae barra al final (/contacto/); las direcciones públicas van sin ella.
+// Las páginas sin indexar no llevan canónica: la 404 se muestra en cualquier dirección que no exista.
+const ruta = Astro.url.pathname.replace(/\/$/, '') || '/';
+const canonica = Astro.site && indexar ? new URL(ruta, Astro.site).href : undefined;
+
+// Facebook y WhatsApp piden la dirección completa de la imagen.
+const compartir = await getImage({ src: imagenCompartir, width: 1200, height: 630, format: 'jpg', quality: 82 });
+const urlCompartir = Astro.site ? new URL(compartir.src, Astro.site).href : undefined;
+const altCompartir = `Logo de ${negocio.nombre}, el título ¿Tu aparato dejó de funcionar?, el WhatsApp ${negocio.telefono} con la frase Mándanos foto y te cotizamos, y una fila de aparatos (pantalla, bocina, microondas, licuadora, ventilador y plancha) con el sello de ${negocio.experiencia}.`;
 ---
 
 <!doctype html>
@@ -30,6 +41,8 @@ const canonica = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : und
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{tituloCompleto}</title>
+    {/* La fuente va arriba para que el navegador encuentre la precarga cuanto antes */}
+    <Font cssVariable="--font-montserrat" preload={[{ weight: '400' }, { weight: '700' }]} />
     <meta name="description" content={descripcion} />
     {!indexar && <meta name="robots" content="noindex, nofollow" />}
     {canonica && <link rel="canonical" href={canonica} />}
@@ -45,8 +58,19 @@ const canonica = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : und
     <meta property="og:title" content={tituloCompleto} />
     <meta property="og:description" content={descripcion} />
     {canonica && <meta property="og:url" content={canonica} />}
-
-    <Font cssVariable="--font-montserrat" preload={[{ weight: '400' }, { weight: '700' }]} />
+    {
+      urlCompartir && (
+        <>
+          <meta property="og:image" content={urlCompartir} />
+          <meta property="og:image:type" content="image/jpeg" />
+          <meta property="og:image:width" content="1200" />
+          <meta property="og:image:height" content="630" />
+          <meta property="og:image:alt" content={altCompartir} />
+          <meta name="twitter:card" content="summary_large_image" />
+        </>
+      )
+    }
+    {indexar && <link rel="sitemap" href="/sitemap-index.xml" />}
   </head>
   <body>
     <a class="saltar" href="#contenido">Saltar al contenido</a>
@@ -56,6 +80,8 @@ const canonica = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : und
     </main>
     <Footer />
     <BarraWhatsApp mensaje={mensajeWhatsApp} />
+    {/* Datos para Google al final: no retrasan el primer render */}
+    {indexar && <DatosNegocio imagen={urlCompartir} />}
   </body>
 </html>
 
